@@ -12,7 +12,6 @@ disp('start');
 
 [X,Y,~,~,~] = ppc(X,Y,0.005);
 s = size(U); n = mean(0.05*s(1));
-disp(n);
 U = U(1:n,:);
 
 disp('finished');
