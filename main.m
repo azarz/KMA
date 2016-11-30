@@ -45,25 +45,30 @@ disp('Projecting data');
 %% - Classify
 
 PhitoF = []; YF = [];
+
 for i = 1:options.numDomains
     eval(sprintf(' Phi%itoF = Phi{1,%i}.train; ',i,i));
     eval(sprintf(' Phi%iTtoF = Phi{1,%i}.test; ',i,i));
     
-    eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(1:options.nVect,1:ncl*N)]; ',i));
-    eval(sprintf(' YF = [YF;Y%i(1:ncl*N,:)]; ',i));
+    
+    eval(sprintf(' [temp1,temp2] = get_n_value(Phi%itoF,Y%i,ncl*N); ',i,i));
+    eval(sprintf(' PhitoF = [PhitoF,temp1]; YF = [YF;temp2]; '));
+    
+%     eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(:,1:ncl*N))]; ',i));
+%     eval(sprintf(' YF = [YF;Y%i(1:ncl*N,:)]; ',i));     % YF = [YF;Y%i(1:ncl*N,:)];
 end
 
 % - Classify using a classic classifier
-for i = 1:options.numDomains
-    eval(sprintf(' Ypred = classify(Phi%itoF(1:options.nVect,1:ncl*N)'',PhitoF'',YF); ',i));
-    eval(sprintf(' results{1,%i}.assess = assessment(Y%i(1:ncl*N,1),Ypred,\''class\''); ',i,i));
-    
-    eval(sprintf(' Ypred = classify(Phi%iTtoF(1:options.nVect,:)'',PhitoF'',YF); ',i));
-    eval(sprintf(' results{1,%i}.assess_T = assessment(YT%i,Ypred,\''class\''); ',i,i));
-    
-    eval(sprintf(' Ypred = classify(labeled{1,%i}.X'',labeled{1,%i}.X'',labeled{1,%i}.Y); ',i,i,i));
-    eval(sprintf(' results{1,%i}.train_error = assessment(labeled{1,%i}.Y,Ypred,\''class\''); ',i,i));
-end
+% for i = 1:options.numDomains
+%     eval(sprintf(' Ypred = classify(Phi%itoF(:,1:ncl*N)'',PhitoF'',YF); ',i));
+%     eval(sprintf(' results{1,%i}.assess = assessment(Y%i(1:ncl*N,1),Ypred,\''class\''); ',i,i));
+%     
+%     eval(sprintf(' Ypred = classify(Phi%iTtoF(:,:)'',PhitoF'',YF); ',i));
+%     eval(sprintf(' results{1,%i}.assess_T = assessment(YT%i,Ypred,\''class\''); ',i,i));
+%     
+%     eval(sprintf(' Ypred = classify(labeled{1,%i}.X'',labeled{1,%i}.X'',labeled{1,%i}.Y); ',i,i,i));
+%     eval(sprintf(' results{1,%i}.train_error = assessment(labeled{1,%i}.Y,Ypred,\''class\''); ',i,i));
+% end
 
 % - Classify using a multi-dimensionnal svm classifier
 % for i = 1:options.numDomains
@@ -78,5 +83,4 @@ mdl = fitcecoc(PhitoF',YF);
 results{3,1}.pred = pred; results{3,1}.score = score; results{3,1}.mdl = mdl;
 results{3,1}.assess = assessment(YF,pred,'class');
 
-clear X*; clear Y*
 disp('KMA finished');
