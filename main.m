@@ -8,9 +8,9 @@ addpath(genpath('../'));    % add sub-directory functions
 disp('Creating data');
 
 options.kernelt = 'rbf';
-N = 20;
+N = 30;
 
-load data/test.mat
+load data/test_66.mat
 Y1=Y;
 XT1 = X(1:2:end,:);
 YT1 = Y(1:2:end,:);
@@ -21,9 +21,9 @@ labeled{1,1}.X = X'; labeled{1,1}.Y = Y;
 test{1,1}.X = XT1; test{1,1}.Y = YT1;
 unlabeled{1,1}.X = U';
 
-load data/test.mat
+load data/test_89.mat
 Y2=Y;
-X = X +rand(size(X))*0.15;
+X = X +rand(size(X))*0.2;
 XT2 = X(1:2:end,:);
 YT2 = Y(1:2:end,:);
 Xtemp = X(2:2:end,:);
@@ -49,65 +49,34 @@ for i = 1:options.numDomains
     eval(sprintf(' Phi%itoF = Phi{1,%i}.train; ',i,i));
     eval(sprintf(' Phi%iTtoF = Phi{1,%i}.test; ',i,i));
     
-    eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(:,1:ncl*N)]; ',i));
+    eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(1:options.nVect,1:ncl*N)]; ',i));
     eval(sprintf(' YF = [YF;Y%i(1:ncl*N,:)]; ',i));
 end
 
+% - Classify using a classic classifier
 for i = 1:options.numDomains
-    eval(sprintf(' Ypred = classify(Phi%itoF(:,1:ncl*N)'',PhitoF'',YF); ',i));
-    eval(sprintf(' results{1,%i}.X = assessment(Y%i(1:ncl*N,1),Ypred,\''class\''); ',i,i));
+    eval(sprintf(' Ypred = classify(Phi%itoF(1:options.nVect,1:ncl*N)'',PhitoF'',YF); ',i));
+    eval(sprintf(' results{1,%i}.assess = assessment(Y%i(1:ncl*N,1),Ypred,\''class\''); ',i,i));
+    
+    eval(sprintf(' Ypred = classify(Phi%iTtoF(1:options.nVect,:)'',PhitoF'',YF); ',i));
+    eval(sprintf(' results{1,%i}.assess_T = assessment(YT%i,Ypred,\''class\''); ',i,i));
+    
+    eval(sprintf(' Ypred = classify(labeled{1,%i}.X'',labeled{1,%i}.X'',labeled{1,%i}.Y); ',i,i,i));
+    eval(sprintf(' results{1,%i}.train_error = assessment(labeled{1,%i}.Y,Ypred,\''class\''); ',i,i));
 end
 
-
-% Phi1toF = Phi{1,1}.train;
-% Phi1TtoF = Phi{1,1}.test;
-% Phi2toF = Phi{1,2}.train;
-% Phi2TtoF = Phi{1,2}.test;
-
-% r1 = []; r2 = [];
-% rT1 = []; rT2 = [];
-
-% for NF = 1:options.nVect
-%     Ypred = classify(Phi1toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-%     Reslatent1Kernel2 = assessment(Y1(1:ncl*N,1),Ypred,'class');
-%     
-%     Ypred = classify(Phi1TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-%     Reslatent1Kernel2T = assessment(YT1,Ypred,'class');
-%     
-%     Ypred = classify(Phi2toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-%     Reslatent2Kernel2 = assessment(Y2(1:ncl*N,1),Ypred,'class');
-%     
-%     Ypred = classify(Phi2TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-%     Reslatent2Kernel2T = assessment(YT2,Ypred,'class');
-%     
-%     r1 = [r1; Reslatent1Kernel2];
-%     rT1 = [rT1; Reslatent1Kernel2T];
-%     
-%     r2 = [r2; Reslatent2Kernel2];
-%     rT2 = [rT2; Reslatent2Kernel2T];
+% - Classify using a multi-dimensionnal svm classifier
+% for i = 1:options.numDomains
+%     eval(sprintf(' mdl = fitcecoc(Phi%itoF(:,1:ncl*N)'',Y%i(1:ncl*N,:)); ',i,i));
+%     eval(sprintf(' [pred,score] = resubPredict(mdl); '));
+%     eval(sprintf(' results{2,%i}.pred = pred; results{2,%i}.score = score; results{2,%i}.mdl = mdl; ',i,i,i));
+%     eval(sprintf(' results{2,%i}.assess = assessment(labeled{1,%i}.Y,pred,\''class\''); ',i,i));
 % end
 
-% results.RBF{1,1}.X = r1;
-% results.RBF{1,1}.XT = rT1;
-% results.RBF{1,2}.X = r2;
-% results.RBF{1,2}.XT = rT2;
+mdl = fitcecoc(PhitoF',YF);
+[pred,score] = resubPredict(mdl);
+results{3,1}.pred = pred; results{3,1}.score = score; results{3,1}.mdl = mdl;
+results{3,1}.assess = assessment(YF,pred,'class');
 
+clear X*; clear Y*
 disp('KMA finished');
-
-%% - Plot
-
-% figure(1)
-% plot(1:options.nVect,1-rT1,'r-'),grid on
-% 
-% figure(2)
-% plot(1:options.nVect,1-rT2,'r-'),grid on
-% 
-% figure(3),
-% scatter(Phi1TtoF(1,:),Phi1TtoF(2,:),20,YT1,'f'), hold on, scatter(Phi2TtoF(1,:),Phi2TtoF(2,:),20,YT2),colormap(jet),hold off
-% grid on
-% axis([-2.5 2.5 -2.5 2.5])
-%  
-% figure(4),
-% plot(Phi1TtoF(1,:),Phi1TtoF(2,:),'r.'), hold on, plot(Phi2TtoF(1,:),Phi2TtoF(2,:),'.'),colormap(jet),hold off
-% grid on
-% axis([-2.5 2.5 -2.5 2.5])
