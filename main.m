@@ -44,12 +44,21 @@ disp('Projecting data');
 
 %% - Classify
 
+PhitoF = []; YF = [];
 for i = 1:options.numDomains
-    eval(sprintf('Phi%itoF = Phi{1,%i}.train;',i,i));
-    eval(sprintf('Phi%iTtoF = Phi{1,%i}.test;',i,i));
+    eval(sprintf(' Phi%itoF = Phi{1,%i}.train; ',i,i));
+    eval(sprintf(' Phi%iTtoF = Phi{1,%i}.test; ',i,i));
     
-    eval(sprintf('r%i = []; rT%i = [];',i,i));
+    eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(:,1:ncl*N)]; ',i));
+    eval(sprintf(' YF = [YF;Y%i(1:ncl*N,:)]; ',i));
 end
+
+for i = 1:options.numDomains
+    eval(sprintf(' Ypred = classify(Phi%itoF(:,1:ncl*N)'',PhitoF'',YF); ',i));
+    eval(sprintf(' results{1,%i}.X = assessment(Y%i(1:ncl*N,1),Ypred,\''class\''); ',i,i));
+end
+
+
 % Phi1toF = Phi{1,1}.train;
 % Phi1TtoF = Phi{1,1}.test;
 % Phi2toF = Phi{1,2}.train;
@@ -58,39 +67,32 @@ end
 % r1 = []; r2 = [];
 % rT1 = []; rT2 = [];
 
-% classify - knnclassify - svmclassify
+% for NF = 1:options.nVect
+%     Ypred = classify(Phi1toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
+%     Reslatent1Kernel2 = assessment(Y1(1:ncl*N,1),Ypred,'class');
+%     
+%     Ypred = classify(Phi1TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
+%     Reslatent1Kernel2T = assessment(YT1,Ypred,'class');
+%     
+%     Ypred = classify(Phi2toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
+%     Reslatent2Kernel2 = assessment(Y2(1:ncl*N,1),Ypred,'class');
+%     
+%     Ypred = classify(Phi2TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
+%     Reslatent2Kernel2T = assessment(YT2,Ypred,'class');
+%     
+%     r1 = [r1; Reslatent1Kernel2];
+%     rT1 = [rT1; Reslatent1Kernel2T];
+%     
+%     r2 = [r2; Reslatent2Kernel2];
+%     rT2 = [rT2; Reslatent2Kernel2T];
+% end
 
-%fitcecoc
-for NF = 1:options.nVect
-    Ypred = classify(Phi1toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-    Reslatent1Kernel2 = assessment(Y1(1:ncl*N,1),Ypred,'class');
-    
-    Ypred = classify(Phi1TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-    Reslatent1Kernel2T = assessment(YT1,Ypred,'class');
-    
-    Ypred = classify(Phi2toF(1:NF,1:ncl*N)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-    Reslatent2Kernel2 = assessment(Y2(1:ncl*N,1),Ypred,'class');
-    
-    Ypred = classify(Phi2TtoF(1:NF,:)',[Phi1toF(1:NF,1:ncl*N),Phi2toF(1:NF,1:ncl*N)]',[Y1(1:ncl*N,:);Y2(1:ncl*N,:)]);
-    Reslatent2Kernel2T = assessment(YT2,Ypred,'class');
-    
-    r1 = [r1; Reslatent1Kernel2];
-    rT1 = [rT1; Reslatent1Kernel2T];
-    
-    r2 = [r2; Reslatent2Kernel2];
-    rT2 = [rT2; Reslatent2Kernel2T];
-end
-
-for i = 1:options.numDomains
-    eval(sprintf('results.RBF{1,%i}.X = r%i;',i,i));
-    eval(sprintf('results.RBF{1,%i}.XT = rT%i;',i,i));
-end
 % results.RBF{1,1}.X = r1;
 % results.RBF{1,1}.XT = rT1;
 % results.RBF{1,2}.X = r2;
 % results.RBF{1,2}.XT = rT2;
 
-
+disp('KMA finished');
 
 %% - Plot
 
