@@ -8,9 +8,9 @@ X_r = []; Y_r = [];
 dim_y = size(Y_r);
 Xtemp = X'; Ytemp = Y; n_bis = N;
 
-disp('get_n_value');
+% disp('get_n_value');
 while(dim_y(1) < N)
-    [X1,Y1,Xtemp,Ytemp,~] = ppc(Xtemp,Ytemp,num_per_val);
+    [X1,Y1,Xtemp,Ytemp,~] = ppc(Xtemp,Ytemp,num_per_val,0);
     X_r = [X_r;X1]; Y_r = [Y_r;Y1];
     
     dim_y = size(Y_r); n_bis = N - dim_y(1);
