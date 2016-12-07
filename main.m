@@ -10,7 +10,7 @@ disp('Creating data');
 options.kernelt = 'rbf';
 N = 30;
 
-load data/test_66.mat
+load data/test_89.mat
 Y1=Y;
 XT1 = X(1:2:end,:);
 YT1 = Y(1:2:end,:);
@@ -21,7 +21,7 @@ labeled{1,1}.X = X'; labeled{1,1}.Y = Y;
 test{1,1}.X = XT1; test{1,1}.Y = YT1;
 unlabeled{1,1}.X = U';
 
-load data/test_89.mat
+load data/test_66.mat
 Y2=Y;
 X = X +rand(size(X))*0.2;
 XT2 = X(1:2:end,:);
@@ -70,16 +70,17 @@ end
 % end
 
 % - Classify using a multi-dimensionnal svm classifier
-% for i = 1:options.numDomains
-%     eval(sprintf(' mdl = fitcecoc(Phi%itoF(:,1:ncl*N)'',Y%i(1:ncl*N,:)); ',i,i));
-%     eval(sprintf(' [pred,score] = resubPredict(mdl); '));
-%     eval(sprintf(' results{2,%i}.pred = pred; results{2,%i}.score = score; results{2,%i}.mdl = mdl; ',i,i,i));
-%     eval(sprintf(' results{2,%i}.assess = assessment(labeled{1,%i}.Y,pred,\''class\''); ',i,i));
-% end
+disp(size(PhitoF));
+for i = 1:options.numDomains
+    eval(sprintf(' mdl = fitcecoc(PhitoF(:,(%i-1)*N*ncl+1:N*ncl*%i)'',YF((%i-1)*N*ncl+1:N*ncl*%i,:)); ',i,i,i,i));
+    eval(sprintf(' [pred,score] = resubPredict(mdl); '));
+    eval(sprintf(' results{1,%i}.pred = pred; results{1,%i}.score = score; results{1,%i}.mdl = mdl; ',i,i,i));
+    eval(sprintf(' results{1,%i}.assess = assessment(YF((%i-1)*N*ncl+1:N*ncl*%i,:),pred,\''class\''); ',i,i,i));
+end
 
 mdl = fitcecoc(PhitoF',YF);
 [pred,score] = resubPredict(mdl);
-results{3,1}.pred = pred; results{3,1}.score = score; results{3,1}.mdl = mdl;
-results{3,1}.assess = assessment(YF,pred,'class');
+results{2,1}.pred = pred; results{2,1}.score = score; results{2,1}.mdl = mdl;
+results{2,1}.assess = assessment(YF,pred,'class');
 
 disp('KMA finished');
