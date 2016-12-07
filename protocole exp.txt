@@ -1,3 +1,5 @@
+Détermination de l'efficacité de KMA :
+
 pour un couple (image1, image2) donné, image1 étant l'image de référence du KEMA, on réalise les étapes suivantes :
 -On calcule un classificateur calssique (SVM1) pour l'image 1, dont on note l'OA(1,1)
 -On classifie image2 avec SVM1, on note OA(1,2), qui vaut environ (1/nbClasses)
@@ -13,3 +15,14 @@ OA(1,1) et que OA(K,2) soit bien supérieur à OA(1,2)
 -On réitère, cette fois-ci avec 3 images, puis 4 (etc.)
 
 -On pourra ensuite, par exemple, utiliser random forests au lieu de SVM, ou encore des réseaux de neurones.
+
+
+
+
+Réalisation de jolis graphiques :
+
+Toutes choses égales par ailleurs, on modifie le nombre d'échantillons en entrée pour l'image de référence.
+
+Toutes choses égales par ailleurs, on modifie le nombre d'échantillons en entrées pour les autres domaines.
+
+On refait plusieurs fois exactement la même chose (étant donné que la méthode ppc utilise de l'aléatoire, on peut tester sobn déterminisme)
