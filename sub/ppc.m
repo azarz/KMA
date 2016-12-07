@@ -19,18 +19,14 @@
 %
 % Devis Tuia and Jordi Mu?oz, 2010
 
-function [X_train,Y_train,X_test,Y_test,indices,pos] = ppc(X,Y,ppc, randstate)
+function [X_train,Y_train,X_test,Y_test,indices,pos] = ppc(X,Y,ppc, print)
 
-if nargin < 4   %if randstate not given, set it to 0
-    randstate = 0;
+if nargin < 4
+    print = 1;
 end
 
-%not recommended anymore
-%s = rand('state');
-%rand('state',randstate);
-
-s = rng;    %Get random state
-rng(randstate);     %Random value based on integer
+% s = rng;    %Get random state
+% rng(randstate);     %Random value based on integer
 
 flip = 0;
 class_list = unique(Y(:,1));   %store each label value
@@ -55,7 +51,9 @@ if ppc >= 1     %start spliting with #ppc
         ppc2 = ppc;
         if size(class_id,1) <= ppc    %if given ppc is too low
             ppc2 = size(class_id,1) - ceil(size(class_id,1)/5);
-            fprintf('Taking 80%% of the %i available pixels for class %i\n',size(class_id,1),i);
+            if print ~= 0
+                fprintf('Taking 80%% of the %i available pixels for class %i\n',size(class_id,1),i);
+            end
         end
         
         indices(class_id(perm_table(1:ppc2))) = 1;     %split indices, based on ppc
@@ -93,5 +91,5 @@ if flip     %if initial vector where flipped, flip result back
     Y_test = Y_test';
 end
 
-%rand('state',s);
-rng(s);
+% rand('state',s);
+% rng(s);
