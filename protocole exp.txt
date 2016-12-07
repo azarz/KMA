@@ -2,7 +2,7 @@ Détermination de l'efficacité de KMA :
 
 pour un couple (image1, image2) donné, image1 étant l'image de référence du KEMA, on réalise les étapes suivantes :
 -On calcule un classificateur calssique (SVM1) pour l'image 1, dont on note l'OA(1,1)
--On classifie image2 avec SVM1, on note OA(1,2), qui vaut environ (1/nbClasses)
+-On classifie image2 avec SVM1, on note OA(1,2), qui est a priori proche de (1/nbClasses)
 
 -On classifie image1 et image2 avec la méthode KEMA, on note OA(K,1) et OA(K,2) on s'attend à ce que OA(K,1) soit proche de
 OA(1,1) et que OA(K,2) soit bien supérieur à OA(1,2)
