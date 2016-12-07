@@ -50,9 +50,11 @@ for i = 1:options.numDomains
     eval(sprintf(' Phi%itoF = Phi{1,%i}.train; ',i,i));
     eval(sprintf(' Phi%iTtoF = Phi{1,%i}.test; ',i,i));
     
-    
-    eval(sprintf(' [temp1,temp2] = get_n_value(Phi%itoF,Y%i,ncl*N); ',i,i));
-    eval(sprintf(' PhitoF = [PhitoF,temp1]; YF = [YF;temp2]; '));
+    eval(sprintf(' size%i = size(Y%i); ',i,i));
+    eval(sprintf(' size%i = size%i(1); ',i,i));
+    eval(sprintf(' [temp0,~] = get_n_value(Phi%itoF,Y%i,size%i); ',i,i,i));    
+    eval(sprintf(' [temp1,temp2] = get_n_value(temp0'',Y%i,ncl*N); ',i,i));
+    eval(sprintf(' PhitoF = [PhitoF,temp1'']; YF = [YF;temp2]; '));
     
 %     eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(:,1:ncl*N))]; ',i));
 %     eval(sprintf(' YF = [YF;Y%i(1:ncl*N,:)]; ',i));     % YF = [YF;Y%i(1:ncl*N,:)];
