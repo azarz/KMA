@@ -1,14 +1,15 @@
-pour un couple (image1, image2) donné, image1 étant l'image de référence du KEMA, on réalise les étapes suivantes :
+pour un couple (image1, image2) donnÃ©, image1 Ã©tant l'image de rÃ©fÃ©rence du KEMA, on rÃ©alise les Ã©tapes suivantes :
 -On calcule un classificateur calssique (SVM1) pour l'image 1, dont on note l'OA(1,1)
 -On classifie image2 avec SVM1, on note OA(1,2), qui vaut environ (1/nbClasses)
 
--On classifie image1 et image2 avec la méthode KEMA, on note OA(K,1) et OA(K,2) on s'attend à ce que OA(K,1) soit proche de OA(1,1) et que OA(K,2) soit bien supérieur à OA(1,2)
--On classifie image2 indépendament avec SVM2, on obtient OA(2,2) qui doit être supérieur, mais proche, à OA(K,2)
+-On classifie image1 et image2 avec la mÃ©thode KEMA, on note OA(K,1) et OA(K,2) on s'attend Ã  ce que OA(K,1) soit proche de
+OA(1,1) et que OA(K,2) soit bien supÃ©rieur Ã  OA(1,2)
+-On classifie image2 indÃ©pendament avec SVM2, on obtient OA(2,2) qui doit Ãªtre supÃ©rieur, mais proche, Ã  OA(K,2)
 
--On inverse image1 et image2 et on réitère.
+-On inverse image1 et image2 et on rÃ©itÃ¨re.
 
--On réitère avec d'autres couples (image1, image2)
+-On rÃ©itÃ¨re avec d'autres couples (image1, image2)
 
--On réitère, cette fois-ci avec 3 images, puis 4 (etc.)
+-On rÃ©itÃ¨re, cette fois-ci avec 3 images, puis 4 (etc.)
 
--On pourra ensuite, par exemple, utiliser random forests au lieu de SVM, ou encore des réseaux de neurones.
+-On pourra ensuite, par exemple, utiliser random forests au lieu de SVM, ou encore des rÃ©seaux de neurones.
