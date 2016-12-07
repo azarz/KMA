@@ -25,4 +25,5 @@ Toutes choses égales par ailleurs, on modifie le nombre d'échantillons en entr
 
 Toutes choses égales par ailleurs, on modifie le nombre d'échantillons en entrées pour les autres domaines.
 
-On refait plusieurs fois exactement la même chose (étant donné que la méthode ppc utilise de l'aléatoire, on peut tester sobn déterminisme)
+On refait plusieurs fois exactement la même chose (étant donné que la méthode ppc utilise de l'aléatoire, on peut tester 
+son déterminisme)
