@@ -14,9 +14,9 @@ load data/test_66.mat
 Y1=Y;
 XT1 = X(1:2:end,:);
 YT1 = Y(1:2:end,:);
-Xtemp = X(2:2:end,:);
-Ytemp = Y(2:2:end,:);
-[X,Y,U,~,~] = ppc(Xtemp,Ytemp,N);
+Xtemp1 = X(2:2:end,:);
+Ytemp1 = Y(2:2:end,:);
+[X,Y,U,~,~] = ppc(Xtemp1,Ytemp1,N);
 labeled{1,1}.X = X'; labeled{1,1}.Y = Y;
 test{1,1}.X = XT1; test{1,1}.Y = YT1;
 unlabeled{1,1}.X = U';
@@ -26,9 +26,9 @@ Y2=Y;
 X = X +rand(size(X))*0.2;
 XT2 = X(1:2:end,:);
 YT2 = Y(1:2:end,:);
-Xtemp = X(2:2:end,:);
-Ytemp = Y(2:2:end,:);
-[X,Y,U,~,~] = ppc(Xtemp,Ytemp,N);
+Xtemp2 = X(2:2:end,:);
+Ytemp2 = Y(2:2:end,:);
+[X,Y,U,~,~] = ppc(Xtemp2,Ytemp2,N);
 labeled{1,2}.X = X'; labeled{1,2}.Y = Y;
 test{1,2}.X = XT2; test{1,2}.Y = YT2;
 unlabeled{1,2}.X = U';
@@ -49,11 +49,8 @@ PhitoF = []; YF = [];
 for i = 1:options.numDomains
     eval(sprintf(' Phi%itoF = Phi{1,%i}.train; ',i,i));
     eval(sprintf(' Phi%iTtoF = Phi{1,%i}.test; ',i,i));
-    
-    eval(sprintf(' size%i = size(Y%i); ',i,i));
-    eval(sprintf(' size%i = size%i(1); ',i,i));
-    eval(sprintf(' [temp0,~] = get_n_value(Phi%itoF,Y%i,size%i); ',i,i,i));    
-    eval(sprintf(' [temp1,temp2] = get_n_value(temp0'',Y%i,ncl*N); ',i,i));
+  
+    eval(sprintf(' [temp1,temp2] = get_n_value(Phi%itoF,Ytemp%i,ncl*N); ',i,i));
     eval(sprintf(' PhitoF = [PhitoF,temp1'']; YF = [YF;temp2]; '));
     
 %     eval(sprintf(' PhitoF = [PhitoF,Phi%itoF(:,1:ncl*N))]; ',i));
