@@ -10,7 +10,7 @@ disp('Creating data');
 options.kernelt = 'rbf';
 N = 20;
 
-load data/exp_89_3.mat
+load data/exp_89_2000.mat
 Y1=Y;
 XT1 = X(1:2:end,:);
 YT1 = Y(1:2:end,:);
@@ -21,7 +21,7 @@ labeled{1,1}.X = X'; labeled{1,1}.Y = Y;
 test{1,1}.X = XT1; test{1,1}.Y = YT1;
 unlabeled{1,1}.X = U';
 
-load data/exp_66_3.mat
+load data/exp_66_2000.mat
 Y2=Y;
 XT2 = X(1:2:end,:);
 YT2 = Y(1:2:end,:);
