@@ -10,7 +10,6 @@ disp('Creating data');
 options.kernelt = 'rbf';
 
 data{1,1}.name = 'data/exp_66_1000.mat'; data{1,1}.n = 55;
-data{1,2}.name = 'data/exp_89_500.mat'; data{1,2}.n = 40;
 n_data = size(data);
 
 for i = 1:n_data(2)
