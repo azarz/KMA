@@ -50,9 +50,9 @@ if ppc >= 1     %start spliting with #ppc
                
         ppc2 = ppc;
         if size(class_id,1) <= ppc    %if given ppc is too low
-            ppc2 = size(class_id,1) - ceil(size(class_id,1)/5);
+            ppc2 = size(class_id,1) - floor(size(class_id,1)/5);
             if print ~= 0
-                fprintf('Taking 80%% of the %i available pixels for class %i\n',size(class_id,1),i);
+                fprintf('Taking 80%% of the %i available pixels for class %i : %i\n',size(class_id,1),i,ppc2);
             end
         end
         

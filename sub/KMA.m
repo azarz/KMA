@@ -71,7 +71,7 @@ end
 if isfield(options,'nn') == 0
     options.nn = 9;
 else
-    options.nn = options.graph.nn;
+    options.nn = options.nn;
 end
 
 if isfield(options,'mu') == 0
