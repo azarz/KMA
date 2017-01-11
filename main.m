@@ -38,7 +38,7 @@ clc;
     end
     mx = sum(sz);
     
-    % find ratio of pixel for each img which has less pixel than mx
+    % find ratio of pixel for each img
     size_X = size(labeled{1,1}.X);
     div = 1/n_data(2);
     total = 1;
@@ -49,15 +49,6 @@ clc;
         total = total + (1-temp);
     end
     
-    % find ratio of pixel for img with max pixel
-%     temp = 0;
-%     for i=1:n_data(2)
-%         sz = size(unlabeled{1,i}.X);
-%         if sz(2) == mx(2)
-%             ratio{1,i} = total;
-%         end
-%         temp = temp + ratio{1,i};
-%     end
 %     
     if temp > size_X(2)     % be careful not to take too many pixels !
         ratio{1,1} = ratio {1,1} - (temp-200);
